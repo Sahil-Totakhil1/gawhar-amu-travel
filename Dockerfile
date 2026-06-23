@@ -11,10 +11,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nodejs \
     npm \
+    libpq-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd pdo_pgsql
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
@@ -37,7 +38,7 @@ RUN if [ ! -f .env ]; then cp .env.example .env; fi
 # Generate application key
 RUN php artisan key:generate
 
-# Install frontend dependencies and build (ignore errors if no frontend assets)
+# Install frontend dependencies and build
 RUN npm install && npm run build || true
 
 # Create necessary Laravel storage directories
