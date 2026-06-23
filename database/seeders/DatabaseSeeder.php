@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+         $this->call(AdminSeeder::class);
         // Check if admin user already exists to avoid duplicates
         if (!User::where('email', 'admin@gawhar.com')->exists()) {
             User::create([

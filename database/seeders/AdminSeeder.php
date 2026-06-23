@@ -13,16 +13,13 @@ class AdminSeeder extends Seeder
         $email = 'admin@gawhar.com';
         $newPassword = 'Admin@123';
 
-        // ګورئ چې آیا کارن شتون لري
         $user = User::where('email', $email)->first();
 
         if ($user) {
-            // که کارن شتون ولري، پاسورډ یې تازه کړئ
             $user->password = Hash::make($newPassword);
             $user->save();
             $this->command->info('✅ Admin password reset successfully!');
         } else {
-            // که کارن شتون ونلري، نوی کارن جوړ کړئ
             User::create([
                 'name' => 'Admin',
                 'email' => $email,
