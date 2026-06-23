@@ -17,15 +17,17 @@ class AdminSeeder extends Seeder
 
         if ($user) {
             $user->password = Hash::make($newPassword);
+            $user->is_admin = true; // Admin رول ورکول
             $user->save();
-            $this->command->info('✅ Admin password reset successfully!');
+            $this->command->info('✅ Admin password reset and role assigned!');
         } else {
             User::create([
                 'name' => 'Admin',
                 'email' => $email,
                 'password' => Hash::make($newPassword),
+                'is_admin' => true,
             ]);
-            $this->command->info('✅ Admin user created successfully!');
+            $this->command->info('✅ Admin user created with admin role!');
         }
     }
 }
