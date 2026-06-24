@@ -53,11 +53,14 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
+# Create storage link (مهم! د عکسونو د ښودلو لپاره)
+RUN php artisan storage:link
+
 # Configure Apache to serve from public directory
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
 # Expose port 80
 EXPOSE 80
 
-# Run migrations and start Apache
+# Run migrations, seed database, and start Apache
 CMD php artisan migrate --force && php artisan db:seed --force && php artisan tinker --execute="App\Models\User::where('email','admin@gawhar.com')->update(['role'=>'admin'])" && apache2-foreground
