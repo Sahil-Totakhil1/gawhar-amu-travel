@@ -5,29 +5,27 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $email = 'admin@gawhar.com';
-        $newPassword = 'Admin@123';
+        // لومړی ټول کارنونه ړنګ کړئ (پاکول)
+        DB::table('users')->truncate();
 
-        $user = User::where('email', $email)->first();
+        // یوازې یو اډمین کارن جوړ کړئ
+        User::create([
+            'name' => 'Admin',
+            'username' => 'admin',
+            'email' => 'admin@gawhar.com',
+            'phone' => '0777777777',
+            'password' => Hash::make('Admin@123'),
+            'role' => 'admin',
+            'permission' => null,
+            'is_active' => true,
+        ]);
 
-        if ($user) {
-            $user->password = Hash::make($newPassword);
-            $user->is_admin = true; // Admin رول ورکول
-            $user->save();
-            $this->command->info('✅ Admin password reset and role assigned!');
-        } else {
-            User::create([
-                'name' => 'Admin',
-                'email' => $email,
-                'password' => Hash::make($newPassword),
-                'is_admin' => true,
-            ]);
-            $this->command->info('✅ Admin user created with admin role!');
-        }
+        $this->command->info('✅ All users deleted and new admin user created successfully!');
     }
 }
